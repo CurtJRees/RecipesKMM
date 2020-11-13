@@ -26,7 +26,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":sharedCore"))
+                api(project(":sharedCore"))
             }
         }
         val commonTest by getting {

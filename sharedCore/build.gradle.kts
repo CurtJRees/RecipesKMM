@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
+    id("kotlinx-serialization")
     id("com.android.library")
     id("kotlin-android-extensions")
 }
@@ -25,7 +26,11 @@ kotlin {
         }
     }
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation(Serialization.core)
+            }
+        }
         val jvmMain by getting
         val androidMain by getting
         val iosMain by getting
