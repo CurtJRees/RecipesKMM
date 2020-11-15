@@ -1,1 +1,1 @@
-web: backend/build/install/RecipesKMM/bin/RecipesKMM
+web: backend/build/install/backend/bin/backend
