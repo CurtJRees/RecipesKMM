@@ -12,7 +12,9 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 
 fun main() {
-    embeddedServer(Netty, 9090) {
+    val port = System.getenv("PORT")?.toInt() ?: 9090
+
+    embeddedServer(factory = Netty, port = port) {
         install(ContentNegotiation) {
             json()
         }

@@ -21,3 +21,9 @@ dependencies {
 application {
     mainClass.set("ServerKt")
 }
+
+tasks {
+    val stage by creating {
+        dependsOn(installDist)
+    }
+}
