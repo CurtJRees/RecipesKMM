@@ -9,11 +9,12 @@ data class CoreModel(
 @Serializable
 data class ApiRecipesResponse (
     val status: Int,
-    val data: List<Recipe>
+    val data: List<ApiRecipe>
 )
 
 @Serializable
-data class Recipe(
+data class ApiRecipe(
     val id: Long,
-    val name: String
+    val name: String,
+    val imageUrl: String?
 )

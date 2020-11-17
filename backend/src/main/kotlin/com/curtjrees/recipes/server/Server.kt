@@ -1,7 +1,6 @@
 package com.curtjrees.recipes.server
 
 import com.curtjrees.recipes.sharedCore.ApiRecipesResponse
-import com.curtjrees.recipes.sharedCore.Recipe
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.response.*
@@ -9,10 +8,7 @@ import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
@@ -21,20 +17,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main() {
     //Database setup
-    Database.connect(System.getenv("JDBC_DATABASE_URL"), driver = "org.postgresql.Driver")
+    setupDatabase()
+    setupServer()
+}
 
-    transaction {
-        addLogger(StdOutSqlLogger)
-        SchemaUtils.create(Recipes)
-
-//        DbRecipe.new {
-//            name = "First DB Recipe"
-//        }
-        println("Recipes: ${DbRecipe.all().joinToString { it.name }}")
-    }
-
-
-    //Server setup
+private fun setupServer() {
     val port = System.getenv("PORT")?.toInt() ?: 9090
     embeddedServer(factory = Netty, port = port) {
         install(ContentNegotiation) {
@@ -46,7 +33,7 @@ fun main() {
             get("/recipes") {
                 val dbRecipes = transaction { DbRecipe.all().toList() }
                 val apiRecipes = dbRecipes.map {
-                    Recipe(it.id.value.toLong(), it.name)
+                    DbApiMapper.map(it)
                 }
 
                 val response = ApiRecipesResponse(
@@ -54,27 +41,30 @@ fun main() {
                     data = apiRecipes
                 )
                 call.respond(response)
-
-
-//                val recipe = Recipe(0L, "First Recipe")
-//                val response = ApiRecipesResponse(
-//                    status = 200,
-//                    data = listOf(recipe)
-//                )
-//                call.respond(response)
             }
 
         }
     }.start(wait = true)
 }
 
-
-object Recipes : IntIdTable() {
-    val name = varchar("name", 255)
+private fun setupDatabase() {
+    Database.connect(System.getenv("JDBC_DATABASE_URL"), driver = "org.postgresql.Driver")
+    transaction {
+        addLogger(StdOutSqlLogger)
+        SchemaUtils.create(Recipes)
+        println("Recipes: ${DbRecipe.all().joinToString { it.name }}")
+    }
 }
 
-class DbRecipe(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<DbRecipe>(Recipes)
+
+object Recipes : LongIdTable() {
+    val name = varchar("name", 255)
+    val imageUrl = varchar("image_url", 255).nullable()
+}
+
+class DbRecipe(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<DbRecipe>(Recipes)
 
     var name by Recipes.name
+    var imageUrl by Recipes.imageUrl
 }
