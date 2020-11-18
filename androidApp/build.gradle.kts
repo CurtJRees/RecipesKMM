@@ -1,10 +1,8 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("kotlin-android-extensions")
+    kotlin("android.extensions")
 }
-group = "com.curtjrees.recipes"
-version = "1.0-SNAPSHOT"
 
 repositories {
     gradlePluginPortal()
@@ -12,18 +10,14 @@ repositories {
     jcenter()
     mavenCentral()
 }
-dependencies {
-    implementation(project(":sharedFrontend"))
-    implementation("com.google.android.material:material:1.2.0")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
-}
+
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(AndroidSdk.compile)
     defaultConfig {
+        minSdkVersion(AndroidSdk.min)
+        targetSdkVersion(AndroidSdk.target)
+
         applicationId = "com.curtjrees.recipes.androidApp"
-        minSdkVersion(24)
-        targetSdkVersion(29)
         versionCode = 1
         versionName = "1.0"
     }
@@ -32,4 +26,15 @@ android {
             isMinifyEnabled = false
         }
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation(project(":sharedFrontend"))
+
+    implementation("com.google.android.material:material:1.2.0")
+    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 }

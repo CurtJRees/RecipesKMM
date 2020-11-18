@@ -28,6 +28,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                // Coroutines
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}") {
+                    isForce = true
+                }
+
+                // Kotlinx Serialization
                 implementation(Serialization.core)
             }
         }
@@ -37,11 +43,11 @@ kotlin {
     }
 }
 android {
-    compileSdkVersion(29)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    compileSdkVersion(AndroidSdk.compile)
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(29)
+        minSdkVersion(AndroidSdk.min)
+        targetSdkVersion(AndroidSdk.target)
         versionCode = 1
         versionName = "1.0"
     }

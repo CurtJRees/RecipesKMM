@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("kotlin-android-extensions")
+    id("com.squareup.sqldelight")
 }
 group = "com.curtjrees.recipes"
 version = "1.0-SNAPSHOT"
@@ -27,6 +28,16 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":sharedCore"))
+
+                //Ktor
+                implementation(Ktor.clientCore)
+                implementation(Ktor.clientJson)
+                implementation(Ktor.clientLogging)
+                implementation(Ktor.clientSerialization)
+
+                // SQL Delight
+                implementation(SqlDelight.runtime)
+                implementation(SqlDelight.coroutineExtensions)
             }
         }
         val commonTest by getting {
@@ -37,7 +48,12 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("com.google.android.material:material:1.2.0")
+                implementation(Ktor.clientAndroid)
+                implementation(SqlDelight.androidDriver)
+
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinCoroutinesAndroid}") {
+                    isForce = true
+                }
             }
         }
         val androidTest by getting {
@@ -46,16 +62,21 @@ kotlin {
                 implementation("junit:junit:4.12")
             }
         }
-        val iosMain by getting
+        val iosMain by getting {
+            dependencies {
+                implementation(Ktor.clientIos)
+                implementation(SqlDelight.nativeDriver)
+            }
+        }
         val iosTest by getting
     }
 }
 android {
-    compileSdkVersion(29)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    compileSdkVersion(AndroidSdk.compile)
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(29)
+        minSdkVersion(AndroidSdk.min)
+        targetSdkVersion(AndroidSdk.target)
         versionCode = 1
         versionName = "1.0"
     }
@@ -78,3 +99,10 @@ val packForXcode by tasks.creating(Sync::class) {
     into(targetDir)
 }
 tasks.getByName("build").dependsOn(packForXcode)
+
+sqldelight {
+    database("RecipeDatabase") {
+        packageName = "com.curtjrees.recipes.sharedFrontend.db"
+        sourceFolders = listOf("sqldelight")
+    }
+}
