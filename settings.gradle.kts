@@ -17,9 +17,9 @@ rootProject.name = "RecipesKMM"
 
 
 include(":sharedCore")
+include(":sharedFrontend")
 
 include(":backend")
 
-include(":sharedFrontend")
 include(":androidApp")
 

@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("kotlin-android-extensions")
     id("com.squareup.sqldelight")
 }
 group = "com.curtjrees.recipes"
@@ -84,6 +83,9 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+    }
+    buildFeatures {
+        buildConfig = false
     }
 }
 val packForXcode by tasks.creating(Sync::class) {

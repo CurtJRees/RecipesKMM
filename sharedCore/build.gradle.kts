@@ -4,7 +4,6 @@ plugins {
     kotlin("multiplatform")
     id("kotlinx-serialization")
     id("com.android.library")
-    id("kotlin-android-extensions")
 }
 group = "com.curtjrees.recipes"
 version = "1.0-SNAPSHOT"
@@ -55,6 +54,9 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+    }
+    buildFeatures {
+        buildConfig = false
     }
 }
 val packForXcode by tasks.creating(Sync::class) {
