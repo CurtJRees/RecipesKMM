@@ -34,18 +34,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        //        setContentView(R.layout.activity_main)
-        //
-        //
-        //        GlobalScope.launch(Dispatchers.IO) {
-        //            repo.getRecipes().collect {
-        //                val recipes = it
-        //                launch(Dispatchers.Main) {
-        //                    findViewById<TextView>(R.id.text_view).text = recipes.toString()
-        //                }
-        //            }
-        //        }
     }
 }
 
