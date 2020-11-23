@@ -4,6 +4,7 @@ pluginManagement {
         google()
         jcenter()
         mavenCentral()
+        maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
     resolutionStrategy {
         eachPlugin {
@@ -19,7 +20,6 @@ rootProject.name = "RecipesKMM"
 include(":sharedCore")
 include(":sharedFrontend")
 
-include(":backend")
-
 include(":androidApp")
-
+include(":backend")
+include(":desktopConsole")
