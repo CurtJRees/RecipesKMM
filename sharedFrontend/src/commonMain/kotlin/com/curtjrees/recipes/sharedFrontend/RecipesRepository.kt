@@ -45,7 +45,10 @@ class RecipesRepository {
 class RecipesApi {
 //    private val baseUrl = "http://0.0.0.0:9090"
     private val baseUrl = "https://recipes-kmm.herokuapp.com/"
-    private val nonStrictJson = Json { isLenient = true; ignoreUnknownKeys = true }
+    private val nonStrictJson = Json {
+        isLenient = true
+        ignoreUnknownKeys = true
+    }
 
     private val client by lazy {
         HttpClient {
