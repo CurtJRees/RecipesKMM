@@ -25,7 +25,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("com.curtjrees.recipes.server.ServerKt")
+    mainClass.set("com.curtjrees.recipes.server.ServerKt.main")
 }
 
 tasks {

@@ -43,7 +43,7 @@ class RecipesRepository {
 }
 
 class RecipesApi {
-//    private val baseUrl = "http://0.0.0.0:9090"
+//    private val baseUrl = "http://10.0.2.2:9090"
     private val baseUrl = "https://recipes-kmm.herokuapp.com/"
     private val nonStrictJson = Json {
         isLenient = true

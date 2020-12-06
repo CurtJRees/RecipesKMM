@@ -15,7 +15,7 @@ import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun main() {
+fun Application.main() {
     //Database setup
     setupDatabase()
     startServer()
