@@ -18,10 +18,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 fun main() {
     //Database setup
     setupDatabase()
-    setupServer()
+    startServer()
 }
 
-private fun setupServer() {
+private fun startServer() {
     val port = System.getenv("PORT")?.toInt() ?: 9090
     embeddedServer(factory = Netty, port = port) {
         install(ContentNegotiation) {
