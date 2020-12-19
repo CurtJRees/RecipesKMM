@@ -1,5 +1,6 @@
 package com.curtjrees.recipes.server
 
+import com.curtjrees.recipes.sharedCore.ApiRecipeResponse
 import com.curtjrees.recipes.sharedCore.ApiRecipesResponse
 import io.ktor.application.*
 import io.ktor.features.*
@@ -43,6 +44,19 @@ private fun startServer() {
                 val response = ApiRecipesResponse(
                     status = 200,
                     data = apiRecipes
+                )
+                call.respond(response)
+            }
+
+            get("/recipe/{recipeId}") {
+                val recipeId = call.parameters["recipeId"]?.toLongOrNull()!! //TODO: Error handling
+
+                val dbRecipe = transaction { DbRecipe.findById(recipeId) }!! //TODO: Error handling
+                val apiRecipe = DbApiMapper.map(dbRecipe)
+
+                val response = ApiRecipeResponse(
+                    status = 200,
+                    data = apiRecipe
                 )
                 call.respond(response)
             }

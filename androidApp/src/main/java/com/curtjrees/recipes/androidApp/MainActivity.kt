@@ -96,7 +96,10 @@ fun TableItem(modifier: Modifier = Modifier, recipe: Recipe, onClick: (Recipe) -
 
 @Composable
 fun RecipeDetailsScreen(recipeId: Long) {
+    val repo = remember { RecipesRepository() }
+    val recipe = repo.getRecipe(recipeId).collectAsState(initial = null)
+
     Box(Modifier.fillMaxSize()) {
-        Text("RecipeDetails - $recipeId", modifier = Modifier.align(Alignment.Center))
+        Text("${recipe.value}", modifier = Modifier.align(Alignment.Center))
     }
 }

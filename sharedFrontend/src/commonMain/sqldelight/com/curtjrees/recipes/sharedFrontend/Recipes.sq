@@ -11,5 +11,8 @@ INSERT OR REPLACE INTO Recipe(id, name, image_url)VALUES(?,?,?);
 selectAll:
 SELECT * FROM Recipe;
 
+selectById:
+SELECT * FROM Recipe WHERE id = ? LIMIT 1;
+
 deleteAll:
 DELETE FROM Recipe;
