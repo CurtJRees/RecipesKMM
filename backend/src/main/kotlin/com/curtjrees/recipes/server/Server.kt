@@ -48,7 +48,7 @@ private fun startServer() {
                 call.respond(response)
             }
 
-            get("/recipe/{recipeId}") {
+            get("/recipes/{recipeId}") {
                 val recipeId = call.parameters["recipeId"]?.toLongOrNull()!! //TODO: Error handling
 
                 val dbRecipe = transaction { DbRecipe.findById(recipeId) }!! //TODO: Error handling
