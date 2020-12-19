@@ -34,6 +34,6 @@ class RecipesApi {
         }
     }
 
-    suspend fun fetchRecipes(): List<ApiRecipe> = client.get<ApiRecipesResponse>("$baseUrl/recipes").data
+    suspend fun fetchRecipes(): List<ApiRecipe> = client.get<ApiRecipesResponse>("$baseUrl/recipes").data.orEmpty()
 
 }

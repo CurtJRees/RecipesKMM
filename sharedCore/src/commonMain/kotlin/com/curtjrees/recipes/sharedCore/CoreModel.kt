@@ -9,13 +9,13 @@ data class CoreModel(
 @Serializable
 data class ApiRecipeResponse (
     val status: Int,
-    val data: ApiRecipe
+    val data: ApiRecipe?
 )
 
 @Serializable
 data class ApiRecipesResponse (
     val status: Int,
-    val data: List<ApiRecipe>
+    val data: List<ApiRecipe>?
 )
 
 @Serializable

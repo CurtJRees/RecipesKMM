@@ -4,11 +4,13 @@ import com.curtjrees.recipes.sharedCore.ApiRecipeResponse
 import com.curtjrees.recipes.sharedCore.ApiRecipesResponse
 import io.ktor.application.*
 import io.ktor.features.*
+import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.util.pipeline.*
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -49,9 +51,16 @@ private fun startServer() {
             }
 
             get("/recipes/{recipeId}") {
-                val recipeId = call.parameters["recipeId"]?.toLongOrNull()!! //TODO: Error handling
+                val recipeId = call.parameters["recipeId"]?.toLongOrNull() ?: run {
+                    call.respond(HttpStatusCode.BadRequest, "Missing or invalid recipeId")
+                    return@get
+                }
 
-                val dbRecipe = transaction { DbRecipe.findById(recipeId) }!! //TODO: Error handling
+                val dbRecipe = transaction { DbRecipe.findById(recipeId) } ?: run {
+                    call.respond(HttpStatusCode.NotFound, "No recipe with id $recipeId found")
+                    return@get
+                }
+
                 val apiRecipe = DbApiMapper.map(dbRecipe)
 
                 val response = ApiRecipeResponse(

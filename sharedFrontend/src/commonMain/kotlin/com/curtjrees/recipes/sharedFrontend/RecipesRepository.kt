@@ -39,8 +39,9 @@ class RecipesRepository {
 
     fun updateDbFromApi(recipeId: Long) {
         coroutineScope.launch(Dispatchers.Default) {
-            val recipe = fetchRecipeFromApi(recipeId)
-            db?.recipesQueries?.insertItem(recipe.id, recipe.name, recipe.imageUrl)
+            fetchRecipeFromApi(recipeId)?.let { recipe ->
+                db?.recipesQueries?.insertItem(recipe.id, recipe.name, recipe.imageUrl)
+            }
         }
     }
 
@@ -77,8 +78,8 @@ class RecipesApi {
         }
     }
 
-    suspend fun fetchRecipes(): List<ApiRecipe> = client.get<ApiRecipesResponse>("$baseUrl/recipes").data
+    suspend fun fetchRecipes(): List<ApiRecipe> = client.get<ApiRecipesResponse>("$baseUrl/recipes").data.orEmpty()
 
-    suspend fun fetchRecipe(recipeId: Long): ApiRecipe = client.get<ApiRecipeResponse>("$baseUrl/recipes/$recipeId").data
+    suspend fun fetchRecipe(recipeId: Long): ApiRecipe? = client.get<ApiRecipeResponse>("$baseUrl/recipes/$recipeId").data
 
 }
