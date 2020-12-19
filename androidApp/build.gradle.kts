@@ -28,22 +28,19 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-//    packagingOptions {
-//        exclude("META-INF/*.kotlin_module")
-//    }
 
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerVersion = "1.4.10"
+        kotlinCompilerVersion = Versions.kotlin
         kotlinCompilerExtensionVersion = Versions.compose
     }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = "1.8"
         freeCompilerArgs = listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check",
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
         )
@@ -58,6 +55,7 @@ dependencies {
     implementation(Compose.uiTooling)
     implementation(Compose.foundationLayout)
     implementation(Compose.material)
+    implementation(Compose.navigation)
     implementation(Compose.accompanist)
 
     implementation("com.google.android.material:material:1.2.0")
