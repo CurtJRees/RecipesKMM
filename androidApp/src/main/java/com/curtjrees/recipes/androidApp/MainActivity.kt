@@ -3,9 +3,11 @@ package com.curtjrees.recipes.androidApp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumnForIndexed
@@ -42,15 +44,21 @@ fun MainContent() {
     val repo = remember { RecipesRepository() }
     val recipes = repo.getRecipes().collectAsState(initial = emptyList())
 
-    LazyColumnForIndexed(items = recipes.value, modifier = Modifier.fillMaxSize().padding(16.dp)) { index, recipe ->
-        TableItem(recipe)
-        if (index != recipes.value.size - 1) Spacer(Modifier.height(16.dp))
+    LazyColumnForIndexed(items = recipes.value, modifier = Modifier.fillMaxSize()) { index, recipe ->
+        TableItem(recipe = recipe) {
+            val x = 0
+        }
     }
 }
 
 @Composable
-fun TableItem(recipe: Recipe) {
-    Row {
+fun TableItem(modifier: Modifier = Modifier, recipe: Recipe, onClick: (Recipe) -> Unit) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onClick.invoke(recipe) })
+            .padding(16.dp)
+    ) {
         Text(recipe.name)
     }
 }
