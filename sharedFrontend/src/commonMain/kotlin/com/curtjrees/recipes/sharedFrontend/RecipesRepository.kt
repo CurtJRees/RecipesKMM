@@ -18,7 +18,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 
 class RecipesRepository {
 
@@ -28,7 +27,7 @@ class RecipesRepository {
 
     private var recipesJob: Job? = null
 
-    suspend fun fetchRecipesFromApi() = api.fetchRecipes()
+    suspend fun fetchRecipesFromApi(): List<ApiRecipe> = api.fetchRecipes()
     suspend fun fetchRecipeFromApi(recipeId: Long) = api.fetchRecipe(recipeId)
 
     fun getRecipe(recipeId: Long): Flow<Recipe?> {
@@ -62,8 +61,17 @@ class RecipesRepository {
 
     // called from Kotlin/Native clients
     fun startObservingRecipeUpdates(success: (List<Recipe>) -> Unit) {
-        recipesJob = coroutineScope.launch {
-            getRecipes().collect { success(it) }
+//        recipesJob = coroutineScope.launch(Dispatchers.Main) {
+//            val recipes = api.fetchRecipes().map {
+//                Recipe(id = it.id, name = it.name, image_url = it.imageUrl)
+//            }
+//            success(recipes)
+//        }
+
+        recipesJob = coroutineScope.launch(Dispatchers.Main) {
+            getRecipes().collect {
+                success(it)
+            }
         }
     }
 
@@ -76,20 +84,17 @@ class RecipesRepository {
 class RecipesApi {
     //    private val baseUrl = "http://10.0.2.2:9090"
     private val baseUrl = "https://recipes-kmm.herokuapp.com"
-    private val nonStrictJson = Json {
-        isLenient = true
-        ignoreUnknownKeys = true
-    }
 
-    private val client by lazy {
-        HttpClient {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer(nonStrictJson)
-            }
-            install(Logging) {
-                logger = Logger.DEFAULT
-                level = LogLevel.INFO
-            }
+    private val client = HttpClient {
+        install(JsonFeature) {
+            serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+                isLenient = true
+                ignoreUnknownKeys = true
+            })
+        }
+        install(Logging) {
+            logger = Logger.DEFAULT
+            level = LogLevel.INFO
         }
     }
 
