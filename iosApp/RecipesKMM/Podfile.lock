@@ -1,0 +1,16 @@
+PODS:
+  - sharedFrontend (1.0)
+
+DEPENDENCIES:
+  - sharedFrontend (from `../../sharedFrontend`)
+
+EXTERNAL SOURCES:
+  sharedFrontend:
+    :path: "../../sharedFrontend"
+
+SPEC CHECKSUMS:
+  sharedFrontend: 0b4bd6022d40b68737253d23d542212dadfda846
+
+PODFILE CHECKSUM: c0a2d301e3c50b1bece7c62e89ab53e322cb4a1c
+
+COCOAPODS: 1.9.1

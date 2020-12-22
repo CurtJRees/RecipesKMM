@@ -13,8 +13,10 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -23,6 +25,8 @@ class RecipesRepository {
     private val coroutineScope: CoroutineScope = MainScope()
     private val api = RecipesApi()
     private val db = createDb()
+
+    private var recipesJob: Job? = null
 
     suspend fun fetchRecipesFromApi() = api.fetchRecipes()
     suspend fun fetchRecipeFromApi(recipeId: Long) = api.fetchRecipe(recipeId)
@@ -54,6 +58,17 @@ class RecipesRepository {
                 db?.recipesQueries?.insertItem(it.id, it.name, it.imageUrl)
             }
         }
+    }
+
+    // called from Kotlin/Native clients
+    fun startObservingRecipeUpdates(success: (List<Recipe>) -> Unit) {
+        recipesJob = coroutineScope.launch {
+            getRecipes().collect { success(it) }
+        }
+    }
+
+    fun stopObservingRecipeUpdates() {
+        recipesJob?.cancel()
     }
 
 }
