@@ -7,6 +7,18 @@ plugins {
 group = "com.curtjrees.recipes"
 version = "1.0-SNAPSHOT"
 
+//Workaround for - https://youtrack.jetbrains.com/issue/KT-43944
+android {
+    configurations {
+        create("androidTestApi")
+        create("androidTestDebugApi")
+        create("androidTestReleaseApi")
+        create("testApi")
+        create("testDebugApi")
+        create("testReleaseApi")
+    }
+}
+
 repositories {
     gradlePluginPortal()
     google()
