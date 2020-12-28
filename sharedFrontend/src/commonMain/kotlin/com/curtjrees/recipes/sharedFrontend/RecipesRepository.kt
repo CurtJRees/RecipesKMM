@@ -61,13 +61,6 @@ class RecipesRepository {
 
     // called from Kotlin/Native clients
     fun startObservingRecipeUpdates(success: (List<Recipe>) -> Unit) {
-//        recipesJob = coroutineScope.launch(Dispatchers.Main) {
-//            val recipes = api.fetchRecipes().map {
-//                Recipe(id = it.id, name = it.name, image_url = it.imageUrl)
-//            }
-//            success(recipes)
-//        }
-
         recipesJob = coroutineScope.launch(Dispatchers.Main) {
             getRecipes().collect {
                 success(it)
