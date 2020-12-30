@@ -9,7 +9,10 @@ object DbApiMapper {
             id = dbItem.id.value,
             name = dbItem.name,
             imageUrl = dbItem.imageUrl,
+            steps = dbItem.steps?.split(DELIMITER).orEmpty()
         )
     }
+
+    private const val DELIMITER = "$$"
 
 }

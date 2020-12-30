@@ -2,10 +2,6 @@ package com.curtjrees.recipes.sharedCore
 
 import kotlinx.serialization.Serializable
 
-data class CoreModel(
-    val name: String
-)
-
 @Serializable
 data class ApiRecipeResponse (
     val status: Int,
@@ -22,5 +18,6 @@ data class ApiRecipesResponse (
 data class ApiRecipe(
     val id: Long,
     val name: String,
-    val imageUrl: String?
+    val imageUrl: String?,
+    val steps: List<String>
 )

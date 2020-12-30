@@ -87,6 +87,7 @@ private fun setupDatabase() {
 object Recipes : LongIdTable() {
     val name = varchar("name", 255)
     val imageUrl = varchar("image_url", 255).nullable()
+    val steps = text("steps").nullable()
 }
 
 class DbRecipe(id: EntityID<Long>) : LongEntity(id) {
@@ -94,4 +95,5 @@ class DbRecipe(id: EntityID<Long>) : LongEntity(id) {
 
     var name by Recipes.name
     var imageUrl by Recipes.imageUrl
+    var steps by Recipes.steps
 }
