@@ -9,22 +9,31 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.viewModel
+import com.curtjrees.recipes.androidApp.utils.SquareLoadingIndicator
+import com.curtjrees.recipes.androidApp.utils.SwipeToRefreshLayout
+import com.curtjrees.recipes.androidApp.utils.isLoading
 import com.curtjrees.recipes.sharedFrontend.Recipe
-import com.curtjrees.recipes.sharedFrontend.RecipesRepository
 
 @Composable
 fun RecipeListScreen(onRecipeSelected: (Recipe) -> Unit) {
-    val repo = remember { RecipesRepository() }
-    val recipes = repo.getRecipes().collectAsState(initial = emptyList())
+    val viewModel = viewModel<RecipeListViewModel>()
+    val viewState = viewModel.viewState.collectAsState()
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(recipes.value) {
-            TableItem(recipe = it, onClick = onRecipeSelected)
+    SwipeToRefreshLayout(
+        refreshingState = viewState.value.recipes.isLoading,
+        onRefresh = { viewModel.refreshData() },
+        refreshIndicator = { SquareLoadingIndicator() },
+        content = {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(viewState.value.recipes?.data.orEmpty()) {
+                    TableItem(recipe = it, onClick = onRecipeSelected)
+                }
+            }
         }
-    }
+    )
 }
 
 @Composable

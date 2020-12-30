@@ -1,52 +1,81 @@
 package com.curtjrees.recipes.androidApp.feature.recipe_details
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.onActive
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.viewModel
+import com.curtjrees.recipes.androidApp.utils.Resource
+import com.curtjrees.recipes.androidApp.utils.SquareLoadingIndicator
+import com.curtjrees.recipes.androidApp.utils.SwipeToRefreshLayout
+import com.curtjrees.recipes.androidApp.utils.WithDelay
+import com.curtjrees.recipes.androidApp.utils.isLoading
 import com.curtjrees.recipes.sharedFrontend.Recipe
-import com.curtjrees.recipes.sharedFrontend.RecipesRepository
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun RecipeDetailsScreen(recipeId: Long) {
-    val repo = remember { RecipesRepository() }
-    val recipe = repo.getRecipe(recipeId).collectAsState(initial = null)
+    val viewModel = viewModel<RecipeDetailsViewModel>()
+    val viewState = viewModel.viewState.collectAsState()
 
-    RecipeDetailsContent(recipe.value)
+    onActive {
+        viewModel.observeRecipe(recipeId)
+    }
+
+    SwipeToRefreshLayout(
+        refreshingState = viewState.value.recipe.isLoading,
+        onRefresh = { viewModel.refreshData(recipeId) },
+        refreshIndicator = { SquareLoadingIndicator() },
+        content = {
+            viewState.value.recipe?.data?.let {
+                RecipeDetailsContent(it)
+            } ?: run {
+                RecipeDetailsContentEmptyState(viewState.value.recipe?.status)
+            }
+        }
+    )
 }
 
 @Composable
-private fun RecipeDetailsContent(recipe: Recipe?) {
-    Box(Modifier.fillMaxSize()) {
-        val imageModifier = Modifier.fillMaxWidth().aspectRatio(16 / 9f).align(Alignment.TopCenter)
+private fun RecipeDetailsContent(recipe: Recipe) {
+    Column(Modifier.fillMaxSize()) {
+        val imageModifier = Modifier.fillMaxWidth().aspectRatio(16 / 9f)
         CoilImage(
-            data = recipe?.image_url.orEmpty(),
+            data = recipe.image_url.orEmpty(),
             modifier = imageModifier,
             contentScale = ContentScale.FillWidth,
             fadeIn = true,
             loading = {
-                Box(modifier = imageModifier.background(Color.LightGray.copy(alpha = 0.6f))) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
-                        strokeWidth = 4.dp,
-                        color = Color.Blue
-                    )
+                WithDelay(500L) {
+                    Box(modifier = imageModifier.background(Color.LightGray.copy(alpha = 0.6f))) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.preferredSize(36.dp).align(Alignment.Center),
+                            strokeWidth = 4.dp,
+                            color = Color.Blue
+                        )
+                    }
                 }
             },
             error = {
@@ -56,13 +85,51 @@ private fun RecipeDetailsContent(recipe: Recipe?) {
             },
         )
 
-        Text("$recipe", modifier = Modifier.align(Alignment.Center))
+        Text(
+            text = recipe.name,
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
 
-@Preview
+@Composable
+private fun RecipeDetailsContentEmptyState(status: Resource.Status?) {
+    Column(Modifier.fillMaxSize()) {
+        if (status == Resource.Status.ERROR) {
+            Spacer(modifier = Modifier.height(48.dp))
+            Image(imageVector = Icons.Rounded.Warning, modifier = Modifier.preferredSize(48.dp).align(Alignment.CenterHorizontally))
+            Text("Something went wrong", modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp))
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
 @Composable
 private fun PreviewRecipeDetailsContent() {
-    val testRecipe = Recipe(id = 0L, name = "Test Recipe", image_url = null)
-    RecipeDetailsContent(recipe = testRecipe)
+    val testRecipe = Recipe(
+        id = 0L,
+        name = "Test Recipe",
+        image_url = "https://pressfrom.info/upload/images/real/2019/03/25/i-d-invite-myself-over-for-this-spicy-chicken-katsu-sandwich__343749_.jpg?content=1"
+    )
+    RecipeDetailsContent(testRecipe)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewNull_RecipeDetailsContentEmptyState() {
+    RecipeDetailsContentEmptyState(null)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewLoading_RecipeDetailsContentEmptyState() {
+    RecipeDetailsContentEmptyState(Resource.Status.LOADING)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewError_RecipeDetailsContentEmptyState() {
+    RecipeDetailsContentEmptyState(Resource.Status.ERROR)
 }
