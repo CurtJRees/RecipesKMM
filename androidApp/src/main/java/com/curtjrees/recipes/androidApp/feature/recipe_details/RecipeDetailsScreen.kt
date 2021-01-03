@@ -1,6 +1,5 @@
 package com.curtjrees.recipes.androidApp.feature.recipe_details
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
@@ -88,11 +87,38 @@ private fun RecipeDetailsContent(recipe: Recipe) {
             },
         )
 
+        Spacer(Modifier.height(16.dp))
+
         Text(
             text = recipe.name,
             style = MaterialTheme.typography.h5,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(start = 16.dp, end = 24.dp)
         )
+
+        Spacer(Modifier.height(16.dp))
+
+
+        val ingredients = recipe.ingredients?.split("$$")?.filterNot { it.isEmpty() }
+        if (!ingredients.isNullOrEmpty()) {
+            Text(
+                text = "Ingredients",
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Spacer(Modifier.height(8.dp))
+        }
+
+        ingredients?.forEachIndexed { index, ingredient ->
+            Text(
+                text = ingredient,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            if (!ingredients.isLastIndex(index)) Spacer(Modifier.height(16.dp))
+        }
+
+        Spacer(Modifier.height(24.dp))
 
         val steps = recipe.steps?.split("$$")?.filterNot { it.isEmpty() }
         steps?.forEachIndexed { index, step ->
@@ -112,6 +138,8 @@ private fun RecipeDetailsContent(recipe: Recipe) {
 
             if (!steps.isLastIndex(index)) Spacer(Modifier.height(16.dp))
         }
+
+        Spacer(Modifier.height(48.dp))
     }
 }
 
