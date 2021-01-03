@@ -9,7 +9,8 @@ object DbApiMapper {
             id = dbItem.id.value,
             name = dbItem.name,
             imageUrl = dbItem.imageUrl,
-            steps = dbItem.steps?.split(DELIMITER).orEmpty()
+            steps = dbItem.steps?.split(DELIMITER).orEmpty(),
+            ingredients = dbItem.ingredients?.split(DELIMITER).orEmpty()
         )
     }
 

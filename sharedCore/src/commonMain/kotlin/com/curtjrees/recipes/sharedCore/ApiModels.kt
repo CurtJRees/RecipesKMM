@@ -19,5 +19,6 @@ data class ApiRecipe(
     val id: Long,
     val name: String,
     val imageUrl: String?,
-    val steps: List<String>
+    val steps: List<String>,
+    val ingredients: List<String>,
 )

@@ -43,7 +43,7 @@ class RecipesRepository {
     fun updateDbFromApi(recipeId: Long) {
         coroutineScope.launch(Dispatchers.Default) {
             fetchRecipeFromApi(recipeId)?.let { recipe ->
-                db?.recipesQueries?.insertItem(recipe.id, recipe.name, recipe.imageUrl, recipe.steps.joinToString(DELIMITER))
+                db?.recipesQueries?.insertItem(recipe.id, recipe.name, recipe.imageUrl, recipe.steps.joinToString(DELIMITER), recipe.ingredients.joinToString(DELIMITER))
             }
         }
     }
@@ -54,7 +54,7 @@ class RecipesRepository {
 
             //Lazy approach to clear db and insert new data, should be improved
             apiRecipes.forEach {
-                db?.recipesQueries?.insertItem(it.id, it.name, it.imageUrl, it.steps.joinToString(DELIMITER))
+                db?.recipesQueries?.insertItem(it.id, it.name, it.imageUrl, it.steps.joinToString(DELIMITER), it.ingredients.joinToString(DELIMITER))
             }
         }
     }

@@ -79,7 +79,6 @@ private fun setupDatabase() {
     transaction {
         addLogger(StdOutSqlLogger)
         SchemaUtils.create(Recipes)
-        println("Recipes: ${DbRecipe.all().joinToString { it.name }}")
     }
 }
 
@@ -88,6 +87,7 @@ object Recipes : LongIdTable() {
     val name = varchar("name", 255)
     val imageUrl = varchar("image_url", 255).nullable()
     val steps = text("steps").nullable()
+    val ingredients = text("ingredients").nullable()
 }
 
 class DbRecipe(id: EntityID<Long>) : LongEntity(id) {
@@ -96,4 +96,5 @@ class DbRecipe(id: EntityID<Long>) : LongEntity(id) {
     var name by Recipes.name
     var imageUrl by Recipes.imageUrl
     var steps by Recipes.steps
+    var ingredients by Recipes.ingredients
 }

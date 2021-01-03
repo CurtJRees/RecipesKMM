@@ -3,11 +3,12 @@ CREATE TABLE Recipe(
 id INTEGER NOT NULL PRIMARY KEY,
 name TEXT NOT NULL,
 image_url TEXT,
-steps TEXT
+steps TEXT,
+ingredients TEXT
 );
 
 insertItem:
-INSERT OR REPLACE INTO Recipe(id, name, image_url, steps) VALUES (?,?,?,?);
+INSERT OR REPLACE INTO Recipe(id, name, image_url, steps, ingredients) VALUES (?,?,?,?,?);
 
 selectAll:
 SELECT * FROM Recipe;

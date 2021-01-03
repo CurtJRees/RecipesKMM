@@ -134,7 +134,8 @@ private fun PreviewRecipeDetailsContent() {
         id = 0L,
         name = "Test Recipe",
         image_url = "https://pressfrom.info/upload/images/real/2019/03/25/i-d-invite-myself-over-for-this-spicy-chicken-katsu-sandwich__343749_.jpg?content=1",
-        steps = null
+        steps = null,
+        ingredients = null
     )
     RecipeDetailsContent(testRecipe)
 }
