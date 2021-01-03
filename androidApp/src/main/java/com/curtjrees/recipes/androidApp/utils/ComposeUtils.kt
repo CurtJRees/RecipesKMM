@@ -22,3 +22,5 @@ fun WithDelay(
 
     if (visible) content()
 }
+
+fun List<Any>.isLastIndex(index: Int): Boolean = index == (size - 1)

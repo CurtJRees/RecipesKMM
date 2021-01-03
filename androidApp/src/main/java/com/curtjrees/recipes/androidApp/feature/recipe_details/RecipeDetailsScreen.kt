@@ -1,6 +1,8 @@
 package com.curtjrees.recipes.androidApp.feature.recipe_details
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +33,7 @@ import com.curtjrees.recipes.androidApp.utils.Resource
 import com.curtjrees.recipes.androidApp.utils.SquareLoadingIndicator
 import com.curtjrees.recipes.androidApp.utils.SwipeToRefreshLayout
 import com.curtjrees.recipes.androidApp.utils.WithDelay
+import com.curtjrees.recipes.androidApp.utils.isLastIndex
 import com.curtjrees.recipes.androidApp.utils.isLoading
 import com.curtjrees.recipes.sharedFrontend.Recipe
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -60,7 +63,7 @@ fun RecipeDetailsScreen(recipeId: Long) {
 
 @Composable
 private fun RecipeDetailsContent(recipe: Recipe) {
-    Column(Modifier.fillMaxSize()) {
+    ScrollableColumn(Modifier.fillMaxSize()) {
         val imageModifier = Modifier.fillMaxWidth().aspectRatio(16 / 9f)
         CoilImage(
             data = recipe.image_url.orEmpty(),
@@ -90,6 +93,25 @@ private fun RecipeDetailsContent(recipe: Recipe) {
             style = MaterialTheme.typography.h5,
             modifier = Modifier.padding(16.dp)
         )
+
+        val steps = recipe.steps?.split("$$")?.filterNot { it.isEmpty() }
+        steps?.forEachIndexed { index, step ->
+            val stepNum = index + 1
+
+            Text(
+                text = "Step $stepNum",
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = step,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            if (!steps.isLastIndex(index)) Spacer(Modifier.height(16.dp))
+        }
     }
 }
 
