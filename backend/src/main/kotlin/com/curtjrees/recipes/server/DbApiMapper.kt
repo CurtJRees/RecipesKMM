@@ -14,6 +14,15 @@ object DbApiMapper {
         )
     }
 
+    fun mapToDbPayload(apiItem: ApiRecipe): DbRecipePayload {
+        return DbRecipePayload(
+            name = apiItem.name,
+            imageUrl = apiItem.imageUrl,
+            steps = apiItem.steps.joinToString(DELIMITER),
+            ingredients = apiItem.ingredients.joinToString(DELIMITER)
+        )
+    }
+
     private const val DELIMITER = "$$"
 
 }

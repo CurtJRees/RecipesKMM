@@ -1,11 +1,13 @@
 package com.curtjrees.recipes.server
 
+import com.curtjrees.recipes.sharedCore.ApiRecipe
 import com.curtjrees.recipes.sharedCore.ApiRecipeResponse
 import com.curtjrees.recipes.sharedCore.ApiRecipesResponse
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.response.*
+import io.ktor.request.receiveOrNull
 import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
@@ -66,6 +68,31 @@ private fun startServer() {
                 val response = ApiRecipeResponse(
                     status = 200,
                     data = apiRecipe
+                )
+                call.respond(response)
+            }
+
+            post("/recipes") {
+                val newRecipe = call.receiveOrNull<ApiRecipe>() ?: run {
+                    call.respond(HttpStatusCode.BadRequest, "Missing or invalid Recipe payload")
+                    return@post
+                }
+                val dbRecipePayload = DbApiMapper.mapToDbPayload(newRecipe)
+
+                //TODO: Look into error handling for this insert
+                val newDbItem = transaction {
+                    DbRecipe.new {
+                        name = dbRecipePayload.name
+                        imageUrl = dbRecipePayload.imageUrl
+                        steps = dbRecipePayload.steps
+                        ingredients = dbRecipePayload.ingredients
+                    }
+                }
+
+                val newApiRecipe = newRecipe.copy(id = newDbItem.id.value)
+                val response = ApiRecipeResponse(
+                    status = 200,
+                    data = newApiRecipe
                 )
                 call.respond(response)
             }
