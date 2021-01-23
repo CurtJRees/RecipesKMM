@@ -38,7 +38,8 @@ val darkBlueColor = Color(8, 13, 42)
 
 data class SidebarItem(
     val title: String,
-    val icon: ImageVector
+    val icon: ImageVector,
+    val screen: ContentScreen
 )
 
 @Composable

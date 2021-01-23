@@ -7,11 +7,13 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.serialization.json.Json
 
 class RecipesRepository {
     private val api = RecipesApi()
     suspend fun fetchRecipesFromApi() = api.fetchRecipes()
+    suspend fun addNewRecipe(recipe: ApiRecipe) = api.addNewRecipe(recipe)
 }
 
 class RecipesApi {
@@ -35,5 +37,11 @@ class RecipesApi {
     }
 
     suspend fun fetchRecipes(): List<ApiRecipe> = client.get<ApiRecipesResponse>("$baseUrl/recipes").data.orEmpty()
+
+    suspend fun addNewRecipe(recipe: ApiRecipe): ApiRecipe = client.post<ApiRecipe> {
+        url("$baseUrl/recipes")
+        contentType(ContentType.Application.Json)
+        body = recipe
+    }
 
 }
