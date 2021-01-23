@@ -1,4 +1,4 @@
-package com.curtjrees.recipes.desktop
+package com.curtjrees.recipes.desktop.features.recipe
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

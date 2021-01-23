@@ -73,6 +73,8 @@ private fun startServer() {
             }
 
             post("/recipes") {
+                //TODO: Look into using JWT to secure post endpoint
+
                 val newRecipe = call.receiveOrNull<ApiRecipe>() ?: run {
                     call.respond(HttpStatusCode.BadRequest, "Missing or invalid Recipe payload")
                     return@post

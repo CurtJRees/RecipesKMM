@@ -1,4 +1,4 @@
-package com.curtjrees.recipes.desktop
+package com.curtjrees.recipes.desktop.features.recipe
 
 import com.curtjrees.recipes.sharedCore.ApiRecipe
 import com.curtjrees.recipes.sharedCore.ApiRecipesResponse
