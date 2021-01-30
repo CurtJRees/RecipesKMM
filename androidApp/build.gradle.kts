@@ -3,13 +3,6 @@ plugins {
     kotlin("android")
 }
 
-repositories {
-    gradlePluginPortal()
-    google()
-    jcenter()
-    mavenCentral()
-}
-
 android {
     compileSdkVersion(AndroidSdk.compile)
     defaultConfig {
@@ -33,7 +26,6 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerVersion = Versions.kotlin
         kotlinCompilerExtensionVersion = Versions.compose
     }
 }
