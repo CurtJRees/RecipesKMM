@@ -1,6 +1,6 @@
 
 object Versions {
-    const val gradle = "7.0.0-alpha04"
+    const val gradle = "7.0.0-alpha05"
 
     const val kotlin = "1.4.21"
     const val kotlinCoroutines = "1.4.2-native-mt"
@@ -25,7 +25,7 @@ object Versions {
 
 object AndroidSdk {
     const val min = 21
-    const val compile = 29
+    const val compile = 30
     const val target = compile
 }
 

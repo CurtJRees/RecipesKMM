@@ -19,17 +19,17 @@ android {
     }
 }
 
-repositories {
-    gradlePluginPortal()
-    google()
-    jcenter()
-    mavenCentral()
-}
+//repositories {
+//    gradlePluginPortal()
+//    google()
+//    jcenter()
+//    mavenCentral()
+//}
 kotlin {
     val sdkName: String? = System.getenv("SDK_NAME")
 
-    jvm()
     android()
+    jvm()
 
     val isiOSDevice = sdkName.orEmpty().startsWith("iphoneos")
     if (isiOSDevice) {
@@ -64,11 +64,11 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
+//    buildTypes {
+//        getByName("release") {
+//            isMinifyEnabled = false
+//        }
+//    }
     buildFeatures {
         buildConfig = false
     }

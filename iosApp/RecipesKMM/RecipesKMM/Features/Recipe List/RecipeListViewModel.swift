@@ -19,13 +19,13 @@ class RecipeListViewModel: ObservableObject {
     }
 
     func startObservingRecipeUpdates() {
-        repository.startObservingRecipeUpdates(success: { data in
+        repository.startObservingRecipes(success: { data in
             self.recipes = data
         })
     }
 
     func stopObservingRecipeUpdates() {
-        repository.stopObservingRecipeUpdates()
+        repository.stopObservingRecipes()
     }
 
 }

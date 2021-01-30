@@ -1,6 +1,7 @@
 platform :ios, '14.2'
 
+pod 'URLImage'
+
 target 'RecipesKMM' do
     pod 'sharedFrontend', :path => '../../sharedFrontend'
-    
 end

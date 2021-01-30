@@ -26,6 +26,7 @@ class RecipesRepository {
     private val db = createDb()
 
     private var recipesJob: Job? = null
+    private var recipeJob: Job? = null
 
     suspend fun fetchRecipesFromApi(): List<ApiRecipe> = api.fetchRecipes()
     suspend fun fetchRecipeFromApi(recipeId: Long) = api.fetchRecipe(recipeId)
@@ -60,17 +61,31 @@ class RecipesRepository {
     }
 
     // called from Kotlin/Native clients
-    fun startObservingRecipeUpdates(success: (List<Recipe>) -> Unit) {
-        recipesJob = coroutineScope.launch(Dispatchers.Main) {
+    fun startObservingRecipes(success: (List<Recipe>) -> Unit) {
+        recipesJob = coroutineScope.launch {
             getRecipes().collect {
                 success(it)
             }
         }
     }
 
-    fun stopObservingRecipeUpdates() {
+    fun stopObservingRecipes() {
         recipesJob?.cancel()
     }
+
+    fun startObservingRecipe(recipeId: Long, success: (Recipe?) -> Unit) {
+        recipeJob = coroutineScope.launch {
+            getRecipe(recipeId).collect {
+                success(it)
+            }
+        }
+    }
+
+    fun stopObservingRecipe() {
+        recipeJob?.cancel()
+    }
+
+
 
     companion object {
         private const val DELIMITER = "$$"

@@ -1,16 +1,41 @@
 PODS:
-  - sharedFrontend (1.0)
+  - sharedFrontend (1.0.0)
+  - URLImage (2.2.0):
+    - URLImage/Common (= 2.2.0)
+    - URLImage/DownloadManager (= 2.2.0)
+    - URLImage/FileIndex (= 2.2.0)
+    - URLImage/ImageDecoder (= 2.2.0)
+    - URLImage/Log (= 2.2.0)
+    - URLImage/PlainDatabase (= 2.2.0)
+    - URLImage/RemoteContentView (= 2.2.0)
+  - URLImage/Common (2.2.0)
+  - URLImage/DownloadManager (2.2.0):
+    - URLImage/Log
+  - URLImage/FileIndex (2.2.0):
+    - URLImage/Common
+    - URLImage/Log
+    - URLImage/PlainDatabase
+  - URLImage/ImageDecoder (2.2.0)
+  - URLImage/Log (2.2.0)
+  - URLImage/PlainDatabase (2.2.0)
+  - URLImage/RemoteContentView (2.2.0)
 
 DEPENDENCIES:
   - sharedFrontend (from `../../sharedFrontend`)
+  - URLImage
+
+SPEC REPOS:
+  trunk:
+    - URLImage
 
 EXTERNAL SOURCES:
   sharedFrontend:
     :path: "../../sharedFrontend"
 
 SPEC CHECKSUMS:
-  sharedFrontend: 0b4bd6022d40b68737253d23d542212dadfda846
+  sharedFrontend: 84dad1f41188e4643ecb4c5a91463185b7b48460
+  URLImage: d58d7fa82e466c7576f2aea4f2113251a7a38ee9
 
-PODFILE CHECKSUM: c0a2d301e3c50b1bece7c62e89ab53e322cb4a1c
+PODFILE CHECKSUM: 5500f0f89b4dfbfde0b4fad3cde8ecb85a098bd2
 
 COCOAPODS: 1.9.1
